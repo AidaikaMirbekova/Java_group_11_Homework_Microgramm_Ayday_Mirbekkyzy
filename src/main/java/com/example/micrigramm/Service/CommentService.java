@@ -29,8 +29,11 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public boolean deleteAnyComment(Long commentId, Long publicId, Long userId) {
-        var user = userRepository.findUserById(userId);
+    public boolean deleteAnyComment(Long commentId, Long publicId, Long userId)throws Exception {
+        var publication = publicationRepository.findPublicationById(publicId);
+        if (!publication.getAuthor().getId().equals(userId)){
+            throw new Exception("You can't delete comments on other user's posts");
+        }
         commentRepository.deleteCommentByIdAndPublicationIdAndAuthorId(commentId, publicId, userId);
         return true;
     }

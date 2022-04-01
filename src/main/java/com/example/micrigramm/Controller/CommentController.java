@@ -21,7 +21,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/delete/{commentId}")
-    public ResponseEntity<String> deletePublic(@PathVariable Long commentId,Long publicId ,Long usarId){
+    public ResponseEntity<String> deletePublic(@PathVariable Long commentId,Long publicId ,Long usarId) throws Exception {
         if (commentService.deleteAnyComment(commentId,publicId,usarId)) {
             return ResponseEntity.ok().build();
         }
