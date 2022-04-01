@@ -28,7 +28,7 @@ public class PublicationController {
     }
 
     @DeleteMapping("/delete/{publicId}")
-    public ResponseEntity<String> deletePublic(@PathVariable Long publicId,Long usarId){
+    public ResponseEntity<String> deletePublic(@PathVariable Long publicId,Long usarId) throws Exception {
         if (publicationService.deletePublication(publicId,usarId)) {
             return ResponseEntity.ok().build();
         }

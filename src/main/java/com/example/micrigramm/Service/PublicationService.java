@@ -53,7 +53,10 @@ public class PublicationService {
         return PublicationDTO.from(publication);
     }
 
-    public boolean deletePublication(Long publicId, Long autorId) {
+    public boolean deletePublication(Long publicId, Long autorId) throws Exception {
+        var publication = publicationRepository.findPublicationById(publicId);
+        if (!publication.getAuthor().getId().equals(autorId)){
+        throw  new Exception("You can't delete another user's post");}
         commentRepository.deleteCommentsByPublicationId(publicId);
         publicationRepository.deletePublicationByIdAndAuthorId(publicId, autorId);
         return true;
