@@ -1,6 +1,5 @@
 package com.example.micrigramm.Utils;
 
-import com.example.micrigramm.Entity.Publication;
 import com.example.micrigramm.Entity.User;
 import com.example.micrigramm.Repository.*;
 import org.springframework.boot.CommandLineRunner;
@@ -22,6 +21,8 @@ public class InitDataBase {
         return (args) -> {
             List<User> users =new ArrayList<>();
             users.add(new User(1L,"Ayday","aika","qwe@qwe","123",1,1,1));
+            users.add(new User(2L,"Mika","mike","mike@qwe","123",1,1,1));
+
             userRepo.saveAll(users);
 
         };

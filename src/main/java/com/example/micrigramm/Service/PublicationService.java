@@ -40,7 +40,10 @@ public class PublicationService {
         if (user == null) {
             throw new Exception("User not found!");
         }
+        Integer counter=user.getCountPublications();
+        user.setCountPublications(counter+1);
         publicationRepository.save(publication);
+        userRepository.save(user);
     }
 
     public PublicationDTO findPublication(Long publicationId) {
