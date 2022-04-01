@@ -2,6 +2,8 @@ package com.example.micrigramm.Controller;
 
 import com.example.micrigramm.DTO.PublicationDTO;
 import com.example.micrigramm.Service.PublicationService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +35,11 @@ public class PublicationController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/allUserPosts")
+    public Slice<PublicationDTO> allPostsUser(@RequestParam Long userId, Pageable pageable){
+        return publicationService.showAllMovies(userId,pageable);
     }
 
 }

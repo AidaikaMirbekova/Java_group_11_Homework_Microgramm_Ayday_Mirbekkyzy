@@ -7,6 +7,8 @@ import com.example.micrigramm.Repository.CommentRepository;
 import com.example.micrigramm.Repository.PublicationRepository;
 import com.example.micrigramm.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,5 +62,10 @@ public class PublicationService {
         commentRepository.deleteCommentsByPublicationId(publicId);
         publicationRepository.deletePublicationByIdAndAuthorId(publicId, autorId);
         return true;
+    }
+
+    public Slice<PublicationDTO> showAllMovies(Long userId,Pageable pageable){
+        var slica = publicationRepository.findAllByAuthorId(userId,pageable);
+        return slica.map(PublicationDTO::from);
     }
 }
