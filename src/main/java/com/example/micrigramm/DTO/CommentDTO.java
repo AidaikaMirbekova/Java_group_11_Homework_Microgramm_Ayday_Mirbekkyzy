@@ -2,15 +2,16 @@ package com.example.micrigramm.DTO;
 
 import com.example.micrigramm.Entity.Comment;
 import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Data
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PRIVATE,force = true)
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 public class CommentDTO {
 
-    public static CommentDTO from(Comment comment){
+    public static CommentDTO from(Comment comment) {
         return builder()
                 .id(comment.getId())
                 .authorId(comment.getAuthor().getId())

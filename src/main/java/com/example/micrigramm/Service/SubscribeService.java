@@ -5,6 +5,8 @@ import com.example.micrigramm.Entity.Subscribe;
 import com.example.micrigramm.Repository.SubscribeRepository;
 import com.example.micrigramm.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,10 +19,10 @@ public class SubscribeService {
     private final UserRepository userRepository;
     private final SubscribeRepository subscribeRepository;
 
-    public SubscribeDTO addSubscribeTo(Long subscribers, Long toSubcribes) throws Exception {
-        var follower = userRepository.findUserById(subscribers);
+    public SubscribeDTO addSubscribeTo(String subscribers, Long toSubcribes) throws Exception {
+        var follower = userRepository.findByEmailContainsIgnoringCase(subscribers);
         var toFoloow = userRepository.findUserById(toSubcribes);
-        if (subscribeRepository.existsBySubscriberIdAndSubscriptionId(subscribers,toSubcribes)) {
+        if (subscribeRepository.existsBySubscriberIdAndSubscriptionId(follower.getId(), toSubcribes)) {
             throw new Exception("You are already following this user");
         }
         var subscriberTo = Subscribe.builder()
@@ -28,10 +30,11 @@ public class SubscribeService {
                 .subscription(toFoloow)
                 .dateAdded(LocalDateTime.now())
                 .build();
-        Integer counter = follower.getCountSubscribes();
-        follower.setCountSubscribes(counter + 1);
-        Integer counterMyFollower = toFoloow.getCountSubscribers();
-        toFoloow.setCountSubscribers(counterMyFollower + 1);
+        Integer counterFollower = 1;
+        follower.setCountSubscribes(follower.getCountSubscribes() + counterFollower);
+
+        Integer counterToFollow = 1;
+        toFoloow.setCountSubscribers(toFoloow.getCountSubscribers() + counterToFollow);
 
         subscribeRepository.save(subscriberTo);
         userRepository.save(follower);
@@ -39,4 +42,8 @@ public class SubscribeService {
         return SubscribeDTO.from(subscriberTo);
     }
 
+    public Slice<SubscribeDTO> findByEmail(String email, Pageable pageable) {
+        var subscriptions = subscribeRepository.findAllBySubscriberEmail(email, pageable);
+        return subscriptions.map(SubscribeDTO::from);
+    }
 }

@@ -15,22 +15,23 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Service
 public class LikeService {
-private final UserRepository userRepository;
-private final LikeRepository likeRepository;
-private final PublicationRepository publicationRepository;
-    public LikeDTO likePublication(Long userId, Long publicId) throws Exception {
-        var user=userRepository.findUserById(userId);
-        var publication=publicationRepository.findPublicationById(publicId);
-        if (likeRepository.existsLikeByLikeOwnerIdAndPublicationId(userId,publicId)) {
+    private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
+    private final PublicationRepository publicationRepository;
+
+    public LikeDTO likePublication(String userEmail, Long publicId) throws Exception {
+        var user = userRepository.findByEmailContainsIgnoringCase(userEmail);
+        var publication = publicationRepository.findPublicationById(publicId);
+        if (likeRepository.existsLikeByLikeOwnerIdAndPublicationId(user.getId(), publicId)) {
             throw new Exception("You already liked");
         }
-            var like= Like.builder()
-                    .likeOwner(user)
-                    .publication(publication)
-                    .dateAdded(LocalDateTime.now())
-                    .build();
-            likeRepository.save(like);
-            return LikeDTO.from(like);
+        var like = Like.builder()
+                .likeOwner(user)
+                .publication(publication)
+                .dateAdded(LocalDateTime.now())
+                .build();
+        likeRepository.save(like);
+        return LikeDTO.from(like);
 
     }
 }

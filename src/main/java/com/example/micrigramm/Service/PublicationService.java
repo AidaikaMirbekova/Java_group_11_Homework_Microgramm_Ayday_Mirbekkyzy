@@ -4,6 +4,7 @@ import com.example.micrigramm.DTO.PublicationDTO;
 import com.example.micrigramm.Entity.Publication;
 import com.example.micrigramm.Exception.ResourceNotFoundException;
 import com.example.micrigramm.Repository.CommentRepository;
+import com.example.micrigramm.Repository.LikeRepository;
 import com.example.micrigramm.Repository.PublicationRepository;
 import com.example.micrigramm.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+
 @Transactional
 @RequiredArgsConstructor
 @Service
@@ -22,6 +24,7 @@ public class PublicationService {
     private final PublicationRepository publicationRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
 
     public void addPublic(MultipartFile file, String email, String description) throws Exception {
         byte[] data = new byte[0];
@@ -42,8 +45,9 @@ public class PublicationService {
         if (user == null) {
             throw new Exception("User not found!");
         }
-        Integer counter=user.getCountPublications();
-        user.setCountPublications(counter+1);
+        Integer counter = 1;
+        Integer publicationCounter = user.getCountPublications() + counter;
+        user.setCountPublications(publicationCounter);
         publicationRepository.save(publication);
         userRepository.save(user);
     }
@@ -51,21 +55,25 @@ public class PublicationService {
     public PublicationDTO findPublication(Long publicationId) {
         var publication = publicationRepository.findPublicationById(publicationId);
         if (publication == null) {
-       throw new ResourceNotFoundException("Can't find movie with the ID: " + publicationId);}
+            throw new ResourceNotFoundException("Can't find movie with the ID: " + publicationId);
+        }
         return PublicationDTO.from(publication);
     }
 
-    public boolean deletePublication(Long publicId, Long autorId) throws Exception {
+    public boolean deletePublication(Long publicId, String useremail) throws Exception {
+        var user = userRepository.findByEmailContainsIgnoringCase(useremail);
         var publication = publicationRepository.findPublicationById(publicId);
-        if (!publication.getAuthor().getId().equals(autorId)){
-        throw  new Exception("You can't delete another user's post");}
+        if (!publication.getAuthor().getId().equals(user.getId())) {
+            throw new Exception("You can't delete another user's post");
+        }
         commentRepository.deleteCommentsByPublicationId(publicId);
-        publicationRepository.deletePublicationByIdAndAuthorId(publicId, autorId);
+        publicationRepository.deletePublicationByIdAndAuthorId(publicId, user.getId());
+        likeRepository.deleteLikeByPublicationId(publication.getId());
         return true;
     }
 
-    public Slice<PublicationDTO> showAllMovies(Long userId,Pageable pageable){
-        var slica = publicationRepository.findAllByAuthorId(userId,pageable);
+    public Slice<PublicationDTO> showAllMovies(Long userId, Pageable pageable) {
+        var slica = publicationRepository.findAllByAuthorId(userId, pageable);
         return slica.map(PublicationDTO::from);
     }
 }

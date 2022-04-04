@@ -2,6 +2,7 @@ package com.example.micrigramm.DTO;
 
 import com.example.micrigramm.Entity.Subscribe;
 import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 public class SubscribeDTO {
 
-    public static SubscribeDTO from(Subscribe subscribe){
+    public static SubscribeDTO from(Subscribe subscribe) {
         return builder()
                 .id(subscribe.getId())
                 .subscriber(subscribe.getSubscriber().getId())
@@ -23,4 +24,5 @@ public class SubscribeDTO {
     private Long subscriber;
     private Long subscription;
     private LocalDateTime dateAdded;
+
 }

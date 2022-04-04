@@ -1,9 +1,15 @@
 package com.example.micrigramm.Controller;
 
+import com.example.micrigramm.DTO.SubscribeDTO;
+import com.example.micrigramm.Entity.User;
 import com.example.micrigramm.Service.SubscribeService;
 import com.example.micrigramm.Service.UserService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/subscribes")
@@ -16,10 +22,18 @@ public class SubscribeController {
         this.subscribeService = subscribeService;
     }
 
-    @PostMapping("/toSubscribe")
-    public ResponseEntity<String> toSubscribe(@RequestParam Long userId, Long followingTo) throws Exception {
-        subscribeService.addSubscribeTo(userId, followingTo);
+    @PostMapping("/api/followToUser")
+    public ResponseEntity<String> toSubscribe(@RequestParam Long followingTo, Authentication authentication) throws Exception {
+        User user = (User) authentication.getPrincipal();
+        subscribeService.addSubscribeTo(user.getUsername(), followingTo);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/showAllSubscribes")
+    public Slice<SubscribeDTO> findUserSubscribtions(Authentication authentication, Pageable pageable) {
+        User user = (User) authentication.getPrincipal();
+        return subscribeService.findByEmail(user.getUsername(), pageable);
+    }
+
 
 }

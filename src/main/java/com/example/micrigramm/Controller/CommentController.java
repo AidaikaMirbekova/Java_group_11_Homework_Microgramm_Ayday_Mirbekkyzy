@@ -1,11 +1,13 @@
 package com.example.micrigramm.Controller;
 
+import com.example.micrigramm.Entity.User;
 import com.example.micrigramm.Service.CommentService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/api/comments")
 public class CommentController {
     private final CommentService commentService;
 
@@ -13,16 +15,18 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @PostMapping("/addComment")
-    public ResponseEntity<String> addComment(@RequestParam Long publicId,Long userId, String text) {
-        commentService.addComment(publicId,userId,text);
+    @PostMapping("/addNewComment")
+    public ResponseEntity<String> addComment(@RequestParam Long publicId, String text, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        commentService.addComment(publicId, user.getUsername(), text);
         return ResponseEntity.ok().build();
 
     }
 
-    @DeleteMapping("/delete/{commentId}")
-    public ResponseEntity<String> deletePublic(@PathVariable Long commentId,Long publicId ,Long usarId) throws Exception {
-        if (commentService.deleteAnyComment(commentId,publicId,usarId)) {
+    @DeleteMapping("/deleteComment/{commentId}")
+    public ResponseEntity<String> deletePublic(@PathVariable Long commentId, Long publicId, Authentication authentication) throws Exception {
+        User user = (User) authentication.getPrincipal();
+        if (commentService.deleteAnyComment(commentId, publicId, user.getUsername())) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
