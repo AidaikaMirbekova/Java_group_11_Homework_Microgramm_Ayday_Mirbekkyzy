@@ -11,14 +11,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 public class LikeDTO {
     private Long id;
-    private Long likeOwnerId;
+    private String likeOwnerId;
     private Long publicationId;
     private LocalDateTime dateAdded;
 
     public static LikeDTO from(Like like) {
         return builder()
                 .id(like.getId())
-                .likeOwnerId(like.getLikeOwner().getId())
+                .likeOwnerId(like.getLikeOwner().getLogin())
                 .publicationId(like.getPublication().getId())
                 .dateAdded(LocalDateTime.now())
                 .build();

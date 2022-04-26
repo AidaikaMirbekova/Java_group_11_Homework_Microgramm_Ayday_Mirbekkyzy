@@ -2,19 +2,25 @@ package com.example.micrigramm.Service;
 
 import com.example.micrigramm.DTO.PublicationDTO;
 import com.example.micrigramm.Entity.Publication;
+import com.example.micrigramm.Entity.User;
 import com.example.micrigramm.Exception.ResourceNotFoundException;
 import com.example.micrigramm.Repository.CommentRepository;
 import com.example.micrigramm.Repository.LikeRepository;
 import com.example.micrigramm.Repository.PublicationRepository;
 import com.example.micrigramm.Repository.UserRepository;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Id;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Transactional
@@ -26,7 +32,7 @@ public class PublicationService {
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
 
-    public void addPublic(MultipartFile file, String email, String description) throws Exception {
+    public void addPublic(MultipartFile file, String email, PublicationDTO dto) throws Exception {
         byte[] data = new byte[0];
         try {
             data = file.getBytes();
@@ -38,8 +44,8 @@ public class PublicationService {
         var publication = Publication.builder()
                 .author(user)
                 .image(data)
-                .description(description)
-                .dateAdded(LocalDateTime.now())
+                .description(dto.getDescription())
+                .dateAdded(LocalDate.now())
                 .build();
 
         if (user == null) {
@@ -72,8 +78,9 @@ public class PublicationService {
         return true;
     }
 
-    public Slice<PublicationDTO> showAllMovies(Long userId, Pageable pageable) {
-        var slica = publicationRepository.findAllByAuthorId(userId, pageable);
+    public Slice<PublicationDTO> showAllPublic(String user) {
+       Pageable  pageable = PageRequest.of(0, 10, Sort.by("id").descending());
+        var slica = publicationRepository.findAllByAuthorEmail(user, pageable);
         return slica.map(PublicationDTO::from);
     }
 }

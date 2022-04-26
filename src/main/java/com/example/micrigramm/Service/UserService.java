@@ -29,21 +29,20 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
-    public UserDTO register(String name, String login, String email, String password) throws Exception {
-        if (userRepository.existsUserByEmail(email)) {
+    public void register(UserDTO user) throws Exception {
+        if (userRepository.existsUserByEmail(user.getEmail())) {
             throw new Exception("Have an account registered with this email");
         }
-        var user = User.builder()
-                .name(name)
-                .login(login)
-                .email(email)
-                .password(encoder.encode(password))
+        userRepository.save(User.builder()
+                .name(user.getName())
+                .login(user.getLogin())
+                .email(user.getEmail())
+                .password(encoder.encode(user.getPassword()))
                 .countSubscribers(0)
                 .countPublications(0)
                 .countSubscribes(0)
-                .build();
-        userRepository.save(user);
-        return UserDTO.from(user);
+                .build());
+
     }
 
     @Override

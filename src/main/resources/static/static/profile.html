@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Main page</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+    integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+    integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/stylePost.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous">
+  </script>
+  <script src="js/script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand"><img src="images/Instagram_logo.svg.png" width="150px" height="50px"></a>
+      <nav class="main-nav">
+        <a class="nav-link active" aria-current="page" href="#"><span class="h3 mx-2 text-dark" data-toggle="modal"
+            data-target="#staticBackdrop"><i class="bi bi-plus-square"></i></span></a>
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success search-button" type="submit">Search</button>
+        </form>
+      </nav>
+    </div>
+  </nav>
+
+  <div id="main" class="container">
+  </div>
+
+  <!-- Modal POST-->
+  <div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Publication</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="post" id="post_form" class="post_content">
+            <div class="mb-3">
+              <label for="formFileMultiple" class="form-label"></label>
+              <input class="form-control" type="file" id="formFileMultiple" name="file" multiple>
+            </div>
+            <div class="input-group">
+              <span class="input-group-text">Description</span>
+              <textarea class="form-control" aria-label="With textarea" name="description"></textarea>
+            </div>
+            <div class="author">
+              <input type="hidden" name="author_id">
+            </div>
+            <button type="submit" class="btn btn-primary post_button">Post</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL COMMENT-->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Comment text</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="comment_form">
+            <input type="hidden" class="form-control publicationId" id="recipient-name" name="publicationId" value="">
+            <div class="form-group">
+              <label for="message-text" class="col-form-label"></label>
+              <textarea class="form-control" id="message-text" name="commentText"></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Lost comment</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+    const auth = {
+      username: 'test@test',
+      password: "test"
+    };
+
+    let getId = function (id) {
+      $('.publicationId').val(id)
+    }
+
+    const baseUrl = 'http://localhost:8889';
+    const container = $('.container');
+
+    // Lesson 62 add splashScreen for hidden main content in page before register user
+
+
+    let postBlock = '<img class="img" src="..." alt="...">' +
+      '<span class="h1 mx-2 muted"><i class="far bi-heart"></i></i></span>' +
+      '<span class="h1 mx-2 commentIcon publicationId" data-toggle="modal" data-target="#exampleModal"><i class="bi bi-chat"></i></span>' +
+      '<span class="h1 bookmark" style="float:right"><i class="bi bi-bookmark"></i></span>' +
+      '<p class="description" style="font-weight:bold"></p>' +
+      '<div class="likes">Likes:<b></b></div>' +
+      '<div class="author"></div>' +
+      '<span class="date"></span>' +
+      '<div class="comments">' +
+      '<p>Comments</p>' +
+      '</div>';
+    let createBlock = function (htmlBlock, index) {
+      let div = $('<div></div>').attr({
+        id: 'post_' + index,
+        class: 'postBlock'
+      })
+      container.append(div)
+      container.append('<br><hr>')
+      div.append(htmlBlock)
+      $(`#post_${index} .commentIcon`).attr('onClick', `getId(${index})`)
+
+
+    }
+
+    // const commentContainer = document.getElementsByClassName('comment_list')
+    // console.log(commentContainer)
+    // let commentblock = '<dt class="author_comments"></dt>' +
+    //   '<dd class="comment_texts"></dd>' +
+    //   '<dd class="date"></dd>';
+
+
+    // let createCommentBlock = function (htmlBlock, index) {
+    //   let dl = $('<dl></dl>').attr({
+    //     id: 'comment_' + index,
+    //     class: 'commentBlock'
+    //   })
+    //   commentContainer.append(dl)
+    //   commentContainer.append('<br>')
+    //   dl.append(htmlBlock)
+    // }
+
+    // $(`#commentIcon`).val
+
+
+    // {
+    //   axios.get(baseUrl +
+    //       'comments/showComments', {})
+    //     .then(function (response) {
+    //       let data = response.data
+    //       console.log(data)
+    //       data.content.forEach(e => {
+    //         let id = e.id
+
+    //         createCommentBlock(commentblock, id)
+    //         $('#comment_' + id + ' .comment_texts').text(e.commentText)
+    //         $('#comment_' + id + ' .author_comments').text(e.author)
+    //         $('#comment_' + id + ' .date').text(e.dateAdded)
+    //       })
+    //     })
+    // })
+
+
+    // let getLikeOwner = (content) => {
+    //   let str = " "
+    //   for (let i = 0; i < content.likes.length; i++) {
+    //     str += content.likes[i].likeOwner
+    //     if (i < content.likes.length - 1) {
+    //       str += ", "
+    //     }
+    //   }
+    //   return str
+    // }
+
+
+    // Show publications on main page 
+    $(() => {
+      axios
+        .get(baseUrl + '/publications/showAllUserPosts', {
+          auth
+        })
+        .then(function (response) {
+          let data = response.data
+
+          data.content.forEach(e => {
+            let id = e.id
+
+            createBlock(postBlock, id)
+            $('#post_' + id + ' .img').attr('src',
+              'https://st.depositphotos.com/2000885/1902/i/600/depositphotos_19021343-stock-photo-red-heart.jpg'
+            )
+            $('#post_' + id + ' .description').text(e.description)
+            $('#post_' + id + ' .author').text(e.author)
+            $('#post_' + id + ' .date').text(e.dateAdded)
+          })
+        })
+    })
+
+
+    // Comment add modal form event
+   
+    $('#comment_form').on('submit', (e) => {
+      e.preventDefault()
+      let form = new FormData(e.target)
+
+      let data = JSON.stringify(Object.fromEntries(form))
+      console.log(data)
+      axios.post(baseUrl + '/comments/addNewComment', data, {
+        auth: auth,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      $('#exampleModal').modal('toggle');
+    })
+
+    // Publication add add event 
+
+    $('#post_form').on('submit', (e) => {
+      e.preventDefault()
+      let form = new FormData(e.target)
+      axios.post(baseUrl + "/publications/addPost", form, {
+          auth: auth,
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          body: JSON.stringify(form)
+        })
+        .then(response => {
+          console.log(response.status)
+        })
+      $('#staticBackdrop').modal('toggle');
+    })
+  </script>
+</body>
+
+</html>

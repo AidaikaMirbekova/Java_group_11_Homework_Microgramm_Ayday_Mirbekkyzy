@@ -4,6 +4,7 @@ import com.example.micrigramm.Entity.Comment;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder(access = AccessLevel.PRIVATE)
@@ -14,16 +15,17 @@ public class CommentDTO {
     public static CommentDTO from(Comment comment) {
         return builder()
                 .id(comment.getId())
-                .authorId(comment.getAuthor().getId())
+                .author(comment.getAuthor().getLogin())
                 .publicationId(comment.getPublication().getId())
                 .commentText(comment.getCommentText())
-                .dateAdded(LocalDateTime.now())
+                .dateAdded(comment.getDateAdded())
                 .build();
     }
+
 
     private Long id;
     private String commentText;
     private LocalDateTime dateAdded;
-    private Long authorId;
+    private String author;
     private Long publicationId;
 }

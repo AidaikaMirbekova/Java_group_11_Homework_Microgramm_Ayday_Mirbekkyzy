@@ -1,13 +1,17 @@
 package com.example.micrigramm.Controller;
 
+import com.example.micrigramm.DTO.CommentDTO;
 import com.example.micrigramm.Entity.User;
 import com.example.micrigramm.Service.CommentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@CrossOrigin(origins = "http://localhost:63342", maxAge = 36000)
 @RestController
-@RequestMapping("/api/comments")
+@RequestMapping("/comments")
 public class CommentController {
     private final CommentService commentService;
 
@@ -16,9 +20,9 @@ public class CommentController {
     }
 
     @PostMapping("/addNewComment")
-    public ResponseEntity<String> addComment(@RequestParam Long publicId, String text, Authentication authentication) {
+    public ResponseEntity<String> addComment(@RequestBody CommentDTO dto, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        commentService.addComment(publicId, user.getUsername(), text);
+        commentService.addComment(dto, user.getUsername());
         return ResponseEntity.ok().build();
 
     }
@@ -30,5 +34,10 @@ public class CommentController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/showComments/{pubId}")
+    public List<CommentDTO> showComments(@PathVariable Long pubId){
+        return commentService.showComentsByPublic(pubId);
     }
 }

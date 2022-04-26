@@ -1,5 +1,6 @@
 package com.example.micrigramm.Service;
 
+import com.example.micrigramm.DTO.CommentDTO;
 import com.example.micrigramm.Entity.Comment;
 import com.example.micrigramm.Repository.CommentRepository;
 import com.example.micrigramm.Repository.PublicationRepository;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @RequiredArgsConstructor
@@ -18,13 +21,13 @@ public class CommentService {
     private final PublicationRepository publicationRepository;
     private final UserRepository userRepository;
 
-    public void addComment(Long pubId, String useremail, String text) {
-        var publicat = publicationRepository.findPublicationById(pubId);
+    public void addComment(CommentDTO dto, String useremail) {
+        var publicat = publicationRepository.findPublicationById(dto.getPublicationId());
         var user = userRepository.findByEmailContainsIgnoringCase(useremail);
         var comment = Comment.builder()
                 .author(user)
                 .publication(publicat)
-                .commentText(text)
+                .commentText(dto.getCommentText())
                 .dateAdded(LocalDateTime.now())
                 .build();
         commentRepository.save(comment);
@@ -40,4 +43,8 @@ public class CommentService {
         return true;
     }
 
+    public List<CommentDTO> showComentsByPublic(Long pubId){
+        List<Comment> comments= commentRepository.findCommentsByPublicationId(pubId);
+        return comments.stream().map(CommentDTO::from).collect(Collectors.toList());
+    }
 }

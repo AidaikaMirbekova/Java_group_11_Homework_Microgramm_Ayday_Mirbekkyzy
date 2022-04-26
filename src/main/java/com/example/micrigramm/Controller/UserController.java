@@ -2,13 +2,14 @@ package com.example.micrigramm.Controller;
 
 import com.example.micrigramm.DTO.UserDTO;
 import com.example.micrigramm.Service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:63342", maxAge = 36000)
 @RestController
-@RequestMapping("/users")
+@RequestMapping
 public class UserController {
     private final UserService userService;
 
@@ -17,9 +18,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    @ResponseBody
-    public UserDTO registerUser(@RequestParam String name, String login, String email, String password) throws Exception {
-        return userService.register(name, login, email, password);
+    public ResponseEntity<String> registerUser(@RequestBody UserDTO user) throws Exception {
+        userService.register(user);
+        return ResponseEntity.ok().build();
 
     }
 

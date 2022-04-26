@@ -11,10 +11,10 @@ public class UserDTO {
 
     public static UserDTO from(User user) {
         return builder()
-                .id(user.getId())
                 .name(user.getName())
                 .login(user.getLogin())
                 .email(user.getEmail())
+                .password(user.getPassword())
                 .countSubscribers(user.getCountSubscribers())
                 .countSubscribes(user.getCountSubscribes())
                 .countPublication(user.getCountPublications())
@@ -28,4 +28,5 @@ public class UserDTO {
     private Integer countPublication;
     private Integer countSubscribers;
     private Integer countSubscribes;
+    private String password;
 }

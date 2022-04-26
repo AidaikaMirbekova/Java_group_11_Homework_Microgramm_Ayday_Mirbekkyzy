@@ -14,15 +14,15 @@ public class SubscribeDTO {
     public static SubscribeDTO from(Subscribe subscribe) {
         return builder()
                 .id(subscribe.getId())
-                .subscriber(subscribe.getSubscriber().getId())
-                .subscription(subscribe.getSubscription().getId())
+                .subscriber(subscribe.getSubscriber().getLogin())
+                .subscription(subscribe.getSubscription().getLogin())
                 .dateAdded(LocalDateTime.now())
                 .build();
     }
 
     private Long id;
-    private Long subscriber;
-    private Long subscription;
+    private String  subscriber;
+    private String subscription;
     private LocalDateTime dateAdded;
 
 }

@@ -40,8 +40,7 @@ public class SecurityCongiguration extends WebSecurityConfigurerAdapter {
 
         http.httpBasic();
 
-        http.formLogin().disable()
-                .logout().disable();
+        http.formLogin().disable().logout().disable();
 
         http.csrf().disable();
     }

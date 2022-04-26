@@ -3,6 +3,7 @@ package com.example.micrigramm.Entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,14 +21,14 @@ public class Publication {
     @JoinColumn(name = "image_id")
     private byte[] image;
 
-    @JoinColumn(name = "description_id")
+    @JoinColumn(name = "description")
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "author")
     private User author;
 
     @Column(name = "date_added")
-    private LocalDateTime dateAdded;
+    private LocalDate dateAdded;
 
 }

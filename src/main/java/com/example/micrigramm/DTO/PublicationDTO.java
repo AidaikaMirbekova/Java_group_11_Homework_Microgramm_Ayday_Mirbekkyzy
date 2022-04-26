@@ -3,6 +3,7 @@ package com.example.micrigramm.DTO;
 import com.example.micrigramm.Entity.Publication;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,16 +17,16 @@ public class PublicationDTO {
                 .id(publication.getId())
                 .image(publication.getImage())
                 .description(publication.getDescription())
-                .authorId(publication.getAuthor().getId())
-                .dateAdded(LocalDateTime.now())
+                .author(publication.getAuthor().getLogin())
+                .dateAdded(publication.getDateAdded())
                 .build();
     }
 
     private Long id;
     private byte[] image;
     private String description;
-    private Long authorId;
-    private LocalDateTime dateAdded;
+    private String author;
+    private LocalDate dateAdded;
 
 
 }
