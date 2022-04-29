@@ -1,130 +1,150 @@
-@import url(https://fonts.googleapis.com/css?family=Montserrat);
+body{
+	margin:0;
+	color:#6a6f8c;
+	background:#c8c8c8;
+	font:600 16px/18px 'Open Sans',sans-serif;
+}
+*,:after,:before{box-sizing:border-box}
+.clearfix:after,.clearfix:before{content:'';display:table}
+.clearfix:after{clear:both;display:block}
+a{color:inherit;text-decoration:none}
 
-/*basic reset*/
-* {margin: 0; padding: 0;}
-
-html {
-	height: 100%;
-	/*Image only BG fallback*/
-	
-	/*background = gradient + image pattern combo*/
-	background: 
-		linear-gradient(rgba(196, 102, 0, 0.6), rgba(155, 89, 182, 0.6));
+.login-wrap{
+	width:100%;
+	margin:auto;
+	max-width:525px;
+	min-height:670px;
+	position:relative;
+	background:url(https://raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg) no-repeat center;
+	box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+}
+.login-html{
+	width:100%;
+	height:100%;
+	position:absolute;
+	padding:90px 70px 50px 70px;
+	background:rgba(40,57,101,.9);
+}
+.login-html .sign-in-htm,
+.login-html .sign-up-htm{
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	position:absolute;
+	transform:rotateY(180deg);
+	backface-visibility:hidden;
+	transition:all .4s linear;
+}
+.login-html .sign-in,
+.login-html .sign-up,
+.login-form .group .check{
+	display:none;
+}
+.login-html .tab,
+.login-form .group .label,
+.login-form .group .button{
+	text-transform:uppercase;
+}
+.login-html .tab{
+	font-size:22px;
+	margin-right:15px;
+	padding-bottom:5px;
+	margin:0 15px 10px 0;
+	display:inline-block;
+	border-bottom:2px solid transparent;
+}
+.login-html .sign-in:checked + .tab,
+.login-html .sign-up:checked + .tab{
+	color:#fff;
+	border-color:#1161ee;
+}
+.login-form{
+	min-height:345px;
+	position:relative;
+	perspective:1000px;
+	transform-style:preserve-3d;
+}
+.login-form .group{
+	margin-bottom:15px;
+}
+.login-form .group .label,
+.login-form .group .input,
+.login-form .group .button{
+	width:100%;
+	color:#fff;
+	display:block;
+}
+.login-form .group .input,
+.login-form .group .button{
+	border:none;
+	padding:15px 20px;
+	border-radius:25px;
+	background:rgba(255,255,255,.1);
+}
+.login-form .group input[data-type="password"]{
+	text-security:circle;
+	-webkit-text-security:circle;
+}
+.login-form .group .label{
+	color:#aaa;
+	font-size:12px;
+}
+.login-form .group .button{
+	background:#1161ee;
+}
+.login-form .group label .icon{
+	width:15px;
+	height:15px;
+	border-radius:2px;
+	position:relative;
+	display:inline-block;
+	background:rgba(255,255,255,.1);
+}
+.login-form .group label .icon:before,
+.login-form .group label .icon:after{
+	content:'';
+	width:10px;
+	height:2px;
+	background:#fff;
+	position:absolute;
+	transition:all .2s ease-in-out 0s;
+}
+.login-form .group label .icon:before{
+	left:3px;
+	width:5px;
+	bottom:6px;
+	transform:scale(0) rotate(0);
+}
+.login-form .group label .icon:after{
+	top:6px;
+	right:0;
+	transform:scale(0) rotate(0);
+}
+.login-form .group .check:checked + label{
+	color:#fff;
+}
+.login-form .group .check:checked + label .icon{
+	background:#1161ee;
+}
+.login-form .group .check:checked + label .icon:before{
+	transform:scale(1) rotate(45deg);
+}
+.login-form .group .check:checked + label .icon:after{
+	transform:scale(1) rotate(-45deg);
+}
+.login-html .sign-in:checked + .tab + .sign-up + .tab + .login-form .sign-in-htm{
+	transform:rotate(0);
+}
+.login-html .sign-up:checked + .tab + .login-form .sign-up-htm{
+	transform:rotate(0);
 }
 
-body {
-	font-family: montserrat, arial, verdana;
+.hr{
+	height:2px;
+	margin:60px 0 50px 0;
+	background:rgba(255,255,255,.2);
 }
-/*form styles*/
-#msform {
-	width: 400px;
-	margin: 50px auto;
-	text-align: center;
-	position: relative;
-}
-#msform fieldset {
-	background: white;
-	border: 0 none;
-	border-radius: 3px;
-	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
-	padding: 20px 30px;
-	box-sizing: border-box;
-	width: 80%;
-	margin: 0 10%;
-	
-	/*stacking fieldsets above each other*/
-	position: relative;
-}
-/*Hide all except first fieldset*/
-#msform fieldset:not(:first-of-type) {
-	display: none;
-}
-/*inputs*/
-#msform input, #msform textarea {
-	padding: 15px;
-	border: 1px solid #ccc;
-	border-radius: 3px;
-	margin-bottom: 10px;
-	width: 100%;
-	box-sizing: border-box;
-	font-family: montserrat;
-	color: #2C3E50;
-	font-size: 13px;
-}
-/*buttons*/
-#msform .action-button {
-	width: 100px;
-	background: #27AE60;
-	font-weight: bold;
-	color: white;
-	border: 0 none;
-	border-radius: 1px;
-	cursor: pointer;
-	padding: 10px 5px;
-	margin: 10px 5px;
-}
-#msform .action-button:hover, #msform .action-button:focus {
-	box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
-}
-/*headings*/
-.fs-title {
-	font-size: 15px;
-	text-transform: uppercase;
-	color: #2C3E50;
-	margin-bottom: 10px;
-}
-.fs-subtitle {
-	font-weight: normal;
-	font-size: 13px;
-	color: #666;
-	margin-bottom: 20px;
-}
-/*progressbar*/
-#progressbar {
-	margin-bottom: 30px;
-	overflow: hidden;
-	/*CSS counters to number the steps*/
-	counter-reset: step;
-}
-#progressbar li {
-	list-style-type: none;
-	color: white;
-	text-transform: uppercase;
-	font-size: 9px;
-	width: 33.33%;
-	float: left;
-	position: relative;
-}
-#progressbar li:before {
-	content: counter(step);
-	counter-increment: step;
-	width: 20px;
-	line-height: 20px;
-	display: block;
-	font-size: 10px;
-	color: #333;
-	background: white;
-	border-radius: 3px;
-	margin: 0 auto 5px auto;
-}
-/*progressbar connectors*/
-#progressbar li:after {
-	content: '';
-	width: 100%;
-	height: 2px;
-	background: white;
-	position: absolute;
-	left: -50%;
-	top: 9px;
-	z-index: -1; /*put it behind the numbers*/
-}
-#progressbar li:first-child:after {
-	/*connector not needed before the first step*/
-	content: none; 
-}
-/*marking active/completed steps green*/
-/*The number of the step and the connector before it = green*/
-#progressbar li.active:before,  #progressbar li.active:after{
-	background: #27AE60;
-	color: white;
+.foot-lnk{
+	text-align:center;
 }

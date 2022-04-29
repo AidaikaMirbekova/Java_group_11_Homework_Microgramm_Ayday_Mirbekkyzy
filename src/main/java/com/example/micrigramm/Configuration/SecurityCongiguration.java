@@ -31,6 +31,9 @@ public class SecurityCongiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/publications/api/**")
                 .fullyAuthenticated();
 
+        http.authorizeRequests()
+                .antMatchers("/login")
+                .fullyAuthenticated();
 
         http.authorizeRequests()
                 .anyRequest()

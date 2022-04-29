@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="css/register_style.css">
@@ -14,45 +14,63 @@
 </head>
 
 <body>
-    <!-- multistep form -->
-    <div class class="register">
-        <form id="msform">
+<div class="login-wrap">
+    <div class="login-html">
+        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign
+        In</label>
+        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+        <div class="login-form">
 
-            <fieldset>
-                <h2 class="fs-title">Create your account</h2>
-                <input type="text" name="name" placeholder="Name" />
-                <input type="text" name="email" placeholder="Email" required="true" />
-                <input type="text" name="login" placeholder="Login" />
-                <input type="password" name="password" placeholder="Password" required="true" />
-                <input type="password" name="password" placeholder="Confirm Password" required="true" />
-                <button type="submit" name="submit" class="submit action-button" value="Submit">Sign Up</button>
-            </fieldset>
-        </form>
+            <!-- Autentication -->
+            <form id="sign_in" class="sign-in-htm">
+                <div class="group">
+                    <label for="sign_in_user" class="label">Username</label>
+                    <input id="sign_in_user" type="text" name="username" class="input" required>
+                </div>
+                <div class="group">
+                    <label for="sign_in_pass" class="label">Password</label>
+                    <input id="sign_in_pass" type="password" name="password" class="input" data-type="password"
+                           required>
+                </div>
+                <div class="group">
+                    <input type="submit" class="button" value="Sign In">
+                </div>
+                <div class="hr"></div>
+            </form>
+
+            <!-- Autorization -->
+            <form id="sign_up" class="sign-up-htm">
+                <div class="group">
+                    <label for="sign_up_user" class="label">Username</label>
+                    <input id="sign_up_user" type="text" name="username" class="input">
+                </div>
+                <div class="group">
+                    <label for="sign_up_login" class="label">Login</label>
+                    <input id="sign_up_login" type="text" name="login" class="input" required>
+                </div>
+                <div class="group">
+                    <label for="email" class="label">Email Address</label>
+                    <input id="email" type="text" name="email" class="input" required>
+                </div>
+                <div class="group">
+                    <label for="sign_up_pass" class="label">Password</label>
+                    <input id="sign_up_pass" type="password" name="password" class="input" data-type="password"
+                           required>
+                </div>
+                <div class="group">
+                    <label for="repeat_pass" class="label">Repeat Password</label>
+                    <input id="repeat_pass" type="password" name="password" class="input" data-type="password"
+                           required>
+                </div>
+                <div class="group">
+                    <input type="submit" class="button" value="Sign Up">
+                </div>
+                <div class="hr"></div>
+        </div>
     </div>
-
-    <script>
-        const baseUrl = 'http://localhost:8889';
-        // function for show main content after register user
-        $('#msform').on('submit', (e) => {
-            e.preventDefault();
-            let form = new FormData(e.target)
-            let data = JSON.stringify(Object.fromEntries(form))
-            console.log(data)
-            axios.post(baseUrl + '/register', data, {
-                    cache: 'no-cache',
-
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => {
-                    console.log(response.status)
-                })
-            window.location.href = 'http://localhost:63342/micrigramm/static/static/profile.html?_ijt=7il6ub0k4hbakk1pn3l79n17lg&_ij_reload=RELOAD_ON_SAVE'
-
-        })
-    </script>
+</div>
+</div>
+<script src="js/scriptRegister.js"></script>
 </body>
 
 </html>
